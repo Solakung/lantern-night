@@ -210,7 +210,8 @@
     if (ins.t === 'say') {
       const k = SPEAKER_KEY[ins.who];
       if (k && (ins.e || !E.st.vis.spr[k]) && !E.st.vis.cg) showSprite(k, ins.e || (E.st.vis.spr[k] || 'normal'));
-      UI.renderSprites(k);
+      // ตัวละครที่ไม่มีภาพ (เช่น ป้าแดง) พูด ให้ตัวละครบนจอหรี่ลง ส่วนตัวเอกพูดไม่ต้องหรี่
+      UI.renderSprites(k || (ins.who === 'ภูมิ' ? null : '_offscreen'));
     } else UI.renderSprites(null);
     E.global.read[key] = 1;
     E.saveGlobal();
