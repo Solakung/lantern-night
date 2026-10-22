@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ตั้งชื่อภาพเกม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* เครื่องมือหน้าเดียว: แถบควบคุมด้านบน กองภาพที่ลากเข้ามา แล้วรายการช่องภาพที่เกมต้องการแยกตามประเภท */
+:root {
+  --bg: #f4f2ee; --panel: #ffffff; --ink: #1d2233; --muted: #6c7184; --line: #dcd8cf;
+  --accent: #c9792f; --ok: #3d8a5f; --warn: #b8494a; --chip: #ece8e0;
+  --head: 'Mitr', 'Sarabun', system-ui, sans-serif; --body: 'Sarabun', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #141a2b; --panel: #1d2438; --ink: #ece8df; --muted: #9aa0b4; --line: #2f3850;
+    --accent: #e9a24f; --ok: #6cc391; --warn: #e07b7c; --chip: #262f47; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--body); }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-left, 0px)) 60px; display: flex; flex-direction: column; gap: 18px; }
+h1 { font: 500 26px var(--head); margin: 0; }
+h2 { font: 500 18px var(--head); margin: 0; display: flex; gap: 10px; align-items: baseline; }
+h2 small { font: 400 13px var(--body); color: var(--muted); }
+p { margin: 0; color: var(--muted); max-width: 70ch; }
+.bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+.bar label { display: flex; gap: 6px; align-items: center; font-size: 14px; }
+.bar .grow { flex: 1; }
+button, select, input[type=number] { font: inherit; }
+button { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+button:disabled { opacity: .45; cursor: default; }
+button:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#drop { border: 2px dashed var(--line); border-radius: 10px; padding: 26px; text-align: center; color: var(--muted); background: var(--panel); cursor: pointer; }
+#drop.over { border-color: var(--accent); color: var(--ink); }
+#drop b { color: var(--ink); font-family: var(--head); font-weight: 500; }
+.progress { display: flex; gap: 14px; flex-wrap: wrap; font-size: 14px; }
+.progress span { background: var(--chip); padding: 4px 12px; border-radius: 99px; font-variant-numeric: tabular-nums; }
+#pool { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.card.assigned { border-color: var(--ok); }
+.card .thumb { aspect-ratio: 4/3; background: var(--chip) center/contain no-repeat; max-width: 100%; }
+.card .meta { padding: 8px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.card .fn { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card select { width: 100%; padding: 4px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 13px; }
+.card .x { align-self: flex-end; padding: 2px 8px; font-size: 12px; }
+.section { display: flex; flex-direction: column; gap: 10px; }
+.slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px; }
+.slot { display: grid; grid-template-columns: 40px 1fr; gap: 8px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; font-size: 13px; min-width: 0; }
+.slot i { width: 40px; height: 30px; border-radius: 4px; background: var(--chip) center/cover no-repeat; }
+.slot b { font-weight: 600; display: block; font-variant-numeric: tabular-nums; }
+.slot small { color: var(--muted); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.slot.done { border-color: var(--ok); }
+.slot.done b::after { content: ' ✓'; color: var(--ok); }
+.slot.opt { opacity: .75; }
+#log { font-size: 14px; color: var(--ok); min-height: 1.4em; }
+#log.err { color: var(--warn); }
+@media (max-width: 480px) { .wrap { padding-top: 16px; } h1 { font-size: 22px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ตั้งชื่อภาพเกม</h1>
+  <p>ลากภาพที่เจนมาลงกล่องด้านล่าง เครื่องมือจะเดาช่องจากชื่อไฟล์ให้ (เช่นไฟล์ที่มีคำว่า BG03 หรือ baibua_happy) ภาพที่เดาไม่ได้ให้เลือกช่องเองจากเมนูใต้ภาพ เสร็จแล้วกดบันทึกลงโฟลเดอร์เกม หรือดาวน์โหลดเป็นไฟล์ zip ที่จัดโฟลเดอร์ไว้แล้ว</p>
+
+  <div class="bar">
+    <label><input type="checkbox" id="opt-webp" checked> แปลงเป็น WebP (ไฟล์เล็กลง)</label>
+    <label><input type="checkbox" id="opt-resize" checked> ย่อภาพใหญ่เกิน (ฉาก/CG กว้าง 1920, ตัวละครสูง 2000)</label>
+    <span class="grow"></span>
+    <button id="auto">เติมช่องว่างตามลำดับ</button>
+    <button id="save-dir" class="primary">บันทึกลงโฟลเดอร์เกม</button>
+    <button id="save-zip">ดาวน์โหลด zip</button>
+  </div>
+  <div id="log" role="status"></div>
+
+  <div id="drop" tabindex="0"><b>ลากภาพมาวางที่นี่</b> หรือคลิกเพื่อเลือกไฟล์<br><small>รองรับ PNG, JPG, WebP เลือกได้ทีละหลายไฟล์</small></div>
+  <input type="file" id="file" accept="image/*" multiple hidden>
+
+  <div class="progress" id="progress"></div>
+
+  <div class="section"><h2>ภาพที่ลากเข้ามา <small id="pool-count"></small></h2><div id="pool"></div></div>
+  <div id="sections"></div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  const EXPR = {
+    girl: [['normal', 'ปกติ'], ['happy', 'ยิ้ม/ดีใจ'], ['shy', 'เขิน'], ['sad', 'เศร้า'], ['scared', 'ตกใจ/กลัว'], ['angry', 'โกรธ'], ['special', 'พิเศษ']],
+    fasai: [['empty', 'ยิ้มว่างเปล่า'], ['crysmile', 'ยิ้มทั้งน้ำตา']],
+    jedi: [['normal', 'ปกติ'], ['tease', 'แซว'], ['shock', 'ตกใจ'], ['serious', 'จริงจัง'], ['happy', 'ดีใจ']],
+    suea: [['normal', 'ปกติ'], ['smile', 'ยิ้ม'], ['serious', 'จริงจัง']]
+  };
+  const BG_VARIANTS = [['BG01', 'sunset'], ['BG04', 'night'], ['BG06', 'night'], ['BG07', 'night'], ['BG13', 'night'], ['BG14', 'night'],
+    ['BG18', 'night'], ['BG19', 'night'], ['BG20', 'night'], ['BG21', 'night'], ['BG22', 'night']];
+
+  // ---------- รายการช่องภาพทั้งหมดที่เกมต้องการ ----------
+  const SLOTS = [];
+  const add = (cat, folder, name, label, opt) => SLOTS.push({ cat, folder, name, label, opt: !!opt });
+  Object.keys(BGS).filter(k => k !== 'BLACK').forEach(k => add('bg', 'bg', k, BGS[k].name));
+  BG_VARIANTS.forEach(([k, v]) => add('bgv', 'bg', k + '_' + v, BGS[k].name + ' (' + (v === 'night' ? 'กลางคืน' : 'เย็น') + ')', true));
+  ['baibua', 'nina', 'prang', 'mintra', 'fasai'].forEach(c => {
+    EXPR.girl.forEach(([e, t]) => add('spr', 'sprites', c + '_' + e, CHARS[c].name + ' · ' + t));
+    if (c === 'fasai') EXPR.fasai.forEach(([e, t]) => add('spr', 'sprites', c + '_' + e, CHARS[c].name + ' · ' + t));
+  });
+  ['jedi', 'suea'].forEach(c => EXPR[c].forEach(([e, t]) => add('spr', 'sprites', c + '_' + e, CHARS[c].name + ' · ' + t)));
+  Object.keys(CGS).forEach(k => add('cg', 'cg', k, CGS[k]));
+  const CATS = [['bg', 'ฉากพื้นหลัง', 'assets/bg'], ['spr', 'ตัวละคร', 'assets/sprites · ควรเป็นพื้นหลังโปร่งใส'],
+    ['cg', 'CG', 'assets/cg'], ['bgv', 'ฉากเวอร์ชันเวลาอื่น (ไม่บังคับ ถ้าไม่มีเกมจะใช้ภาพหลัก)', 'assets/bg']];
+
+  const items = []; // { id, file, url, slot }
+  let nextId = 1;
+
+  // ---------- เดาช่องจากชื่อไฟล์ ----------
+  function guess(fname) {
+    const n = fname.toLowerCase().replace(/\.[a-z0-9]+$/, '');
+    const taken = new Set(items.map(i => i.slot).filter(Boolean));
+    const free = s => !taken.has(s.name);
+    // ชื่อตรงทั้งหมดก่อน (ยาวที่สุดก่อน เพื่อให้ BG04_night ชนะ BG04)
+    const sorted = SLOTS.slice().sort((a, b) => b.name.length - a.name.length);
+    for (const s of sorted) {
+      const key = s.name.toLowerCase();
+      const re = new RegExp('(^|[^a-z0-9])' + key.replace(/_/g, '[ _-]?') + '($|[^a-z0-9])');
+      if (re.test(n) && free(s)) return s.name;
+    }
+    const m = n.match(/(bg|cg)[ _-]?0*(\d{1,2})/);
+    if (m) {
+      const name = m[1].toUpperCase() + String(m[2]).padStart(2, '0');
+      const s = SLOTS.find(x => x.name === name);
+      if (s && free(s)) return name;
+    }
+    return null;
+  }
+
+  function addFiles(files) {
+    let n = 0;
+    for (const f of files) {
+      if (!f.type.startsWith('image/')) continue;
+      const it = { id: nextId++, file: f, url: URL.createObjectURL(f), slot: null };
+      items.push(it);
+      it.slot = guess(f.name);
+      n++;
+    }
+    render();
+    say(n ? 'เพิ่มภาพ ' + n + ' ไฟล์' : 'ไม่พบไฟล์ภาพ', !n);
+  }
+
+  // ---------- แสดงผล ----------
+  function render() {
+    const pool = $('#pool');
+    pool.innerHTML = '';
+    const used = new Map(items.filter(i => i.slot).map(i => [i.slot, i]));
+    items.forEach(it => {
+      const c = document.createElement('div');
+      c.className = 'card' + (it.slot ? ' assigned' : '');
+      const th = document.createElement('div');
+      th.className = 'thumb';
+      th.style.backgroundImage = 'url("' + it.url + '")';
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const fn = document.createElement('div');
+      fn.className = 'fn'; fn.textContent = it.file.name; fn.title = it.file.name;
+      const sel = document.createElement('select');
+      sel.id = 'sel-' + it.id;
+      sel.setAttribute('aria-label', 'ช่องสำหรับ ' + it.file.name);
+      sel.innerHTML = '<option value="">— ยังไม่ได้เลือก —</option>';
+      CATS.forEach(([cat, title]) => {
+        const g = document.createElement('optgroup');
+        g.label = title.split(' (')[0];
+        SLOTS.filter(s => s.cat === cat).forEach(s => {
+          const o = document.createElement('option');
+          o.value = s.name;
+          const other = used.get(s.name);
+          o.textContent = s.name + ' · ' + s.label + (other && other !== it ? ' (มีแล้ว)' : '');
+          g.appendChild(o);
+        });
+        sel.appendChild(g);
+      });
+      sel.value = it.slot || '';
+      sel.onchange = () => {
+        const prev = items.find(x => x !== it && x.slot === sel.value && sel.value);
+        if (prev) prev.slot = null;
+        it.slot = sel.value || null;
+        render();
+      };
+      const x = document.createElement('button');
+      x.className = 'x'; x.textContent = 'นำออก';
+      x.onclick = () => { URL.revokeObjectURL(it.url); items.splice(items.indexOf(it), 1); render(); };
+      meta.append(fn, sel, x);
+      c.append(th, meta);
+      pool.appendChild(c);
+    });
+    const unassigned = items.filter(i => !i.slot).length;
+    $('#pool-count').textContent = items.length ? items.length + ' ไฟล์' + (unassigned ? ' · ยังไม่เลือกช่อง ' + unassigned : '') : 'ยังไม่มี';
+
+    const sec = $('#sections');
+    sec.innerHTML = '';
+    const prog = $('#progress');
+    prog.innerHTML = '';
+    CATS.forEach(([cat, title, folder]) => {
+      const list = SLOTS.filter(s => s.cat === cat);
+      const done = list.filter(s => used.has(s.name)).length;
+      if (cat !== 'bgv') { const p = document.createElement('span'); p.textContent = title + ' ' + done + '/' + list.length; prog.appendChild(p); }
+      const box = document.createElement('div');
+      box.className = 'section';
+      box.innerHTML = '<h2>' + title + ' <small>' + folder + ' · ' + done + '/' + list.length + '</small></h2>';
+      const grid = document.createElement('div');
+      grid.className = 'slots';
+      list.forEach(s => {
+        const d = document.createElement('div');
+        const it = used.get(s.name);
+        d.className = 'slot' + (it ? ' done' : '') + (s.opt ? ' opt' : '');
+        const i = document.createElement('i');
+        if (it) i.style.backgroundImage = 'url("' + it.url + '")';
+        const t = document.createElement('div');
+        t.style.minWidth = '0';
+        t.innerHTML = '<b></b><small></small>';
+        t.querySelector('b').textContent = s.name;
+        t.querySelector('small').textContent = s.label;
+        d.append(i, t);
+        grid.appendChild(d);
+      });
+      box.appendChild(grid);
+      sec.appendChild(box);
+    });
+    const any = items.some(i => i.slot);
+    $('#save-dir').disabled = !any || !window.showDirectoryPicker;
+    $('#save-dir').title = window.showDirectoryPicker ? '' : 'เบราว์เซอร์นี้บันทึกลงโฟลเดอร์ไม่ได้ ใช้ Chrome หรือ Edge บนคอม หรือใช้ปุ่มดาวน์โหลด zip';
+    $('#save-zip').disabled = !any;
+    $('#save-zip').textContent = window.JSZip ? 'ดาวน์โหลด zip' : 'ดาวน์โหลดทีละไฟล์';
+  }
+
+  function say(msg, err) { const l = $('#log'); l.textContent = msg; l.className = err ? 'err' : ''; }
+
+  // เติมภาพที่ยังไม่มีช่อง ลงช่องว่างตามลำดับรายการ
+  $('#auto').onclick = () => {
+    const taken = new Set(items.map(i => i.slot).filter(Boolean));
+    const free = SLOTS.filter(s => !s.opt && !taken.has(s.name));
+    let n = 0;
+    items.filter(i => !i.slot).forEach(it => { const s = free.shift(); if (s) { it.slot = s.name; n++; } });
+    render();
+    say(n ? 'เติมให้ ' + n + ' ภาพ ตรวจดูว่าตรงช่องไหม แก้ได้จากเมนูใต้ภาพ' : 'ไม่มีภาพที่ยังไม่ได้เลือกช่อง', !n);
+  };
+
+  // ---------- แปลงภาพ ----------
+  async function convert(it) {
+    const slot = SLOTS.find(s => s.name === it.slot);
+    const webp = $('#opt-webp').checked, resize = $('#opt-resize').checked;
+    const ext0 = (it.file.name.match(/\.([a-z0-9]+)$/i) || [, 'png'])[1].toLowerCase().replace('jpeg', 'jpg');
+    if (!webp && !resize) return { blob: it.file, ext: ext0, slot };
+    const bmp = await createImageBitmap(it.file);
+    let w = bmp.width, h = bmp.height;
+    if (resize) {
+      const k = slot.folder === 'sprites' ? Math.min(1, 2000 / h) : Math.min(1, 1920 / w);
+      w = Math.round(w * k); h = Math.round(h * k);
+    }
+    const cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    const ctx = cv.getContext('2d');
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(bmp, 0, 0, w, h);
+    const type = webp ? 'image/webp' : (ext0 === 'jpg' ? 'image/jpeg' : 'image/png');
+    const blob = await new Promise(r => cv.toBlob(r, type, 0.9));
+    const ext = blob.type === 'image/webp' ? 'webp' : blob.type === 'image/jpeg' ? 'jpg' : 'png';
+    return { blob, ext, slot };
+  }
+
+  async function allConverted() {
+    const out = [];
+    const list = items.filter(i => i.slot);
+    for (let n = 0; n < list.length; n++) {
+      say('กำลังแปลงภาพ ' + (n + 1) + '/' + list.length + ' …');
+      out.push(await convert(list[n]));
+    }
+    return out;
+  }
+
+  // บันทึกตรงลงโฟลเดอร์เกม (Chrome/Edge)
+  $('#save-dir').onclick = async () => {
+    let root;
+    try { root = await window.showDirectoryPicker({ mode: 'readwrite' }); }
+    catch (e) { return say('ยกเลิกการเลือกโฟลเดอร์', true); }
+    try {
+      let base = root;
+      if (root.name !== 'assets') {
+        try { await root.getFileHandle('index.html'); base = await root.getDirectoryHandle('assets', { create: true }); }
+        catch (e) { return say('โฟลเดอร์นี้ไม่ใช่โฟลเดอร์เกม เลือกโฟลเดอร์ที่มีไฟล์ index.html หรือโฟลเดอร์ assets', true); }
+      }
+      const files = await allConverted();
+      for (const f of files) {
+        const dir = await base.getDirectoryHandle(f.slot.folder, { create: true });
+        // ลบไฟล์ชื่อเดียวกันนามสกุลอื่น เพื่อไม่ให้เกมหยิบภาพเก่า
+        for (const e of ['webp', 'png', 'jpg']) if (e !== f.ext) { try { await dir.removeEntry(f.slot.name + '.' + e); } catch (_) {} }
+        const fh = await dir.getFileHandle(f.slot.name + '.' + f.ext, { create: true });
+        const w = await fh.createWritable();
+        await w.write(f.blob); await w.close();
+      }
+      say('บันทึกแล้ว ' + files.length + ' ภาพ เปิดเกมใหม่เพื่อดูภาพจริง');
+    } catch (e) { say('บันทึกไม่สำเร็จ: ' + e.message, true); }
+  };
+
+  // ดาวน์โหลด zip ที่จัดโฟลเดอร์ assets/... ไว้แล้ว
+  $('#save-zip').onclick = async () => {
+    try {
+      const files = await allConverted();
+      if (!window.JSZip) {
+        for (const f of files) {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(f.blob);
+          a.download = f.slot.name + '.' + f.ext;
+          document.body.appendChild(a); a.click(); a.remove();
+          await new Promise(r => setTimeout(r, 250));
+        }
+        return say('ดาวน์โหลดแล้ว ' + files.length + ' ไฟล์ ย้ายไฟล์ BG ไป assets/bg, CG ไป assets/cg และที่เหลือไป assets/sprites');
+      }
+      const zip = new JSZip();
+      files.forEach(f => zip.file('assets/' + f.slot.folder + '/' + f.slot.name + '.' + f.ext, f.blob));
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'game-images.zip';
+      document.body.appendChild(a); a.click(); a.remove();
+      say('ดาวน์โหลดแล้ว ' + files.length + ' ภาพ แตกไฟล์ zip ทับในโฟลเดอร์เกมได้เลย');
+    } catch (e) { say('สร้าง zip ไม่สำเร็จ: ' + e.message, true); }
+  };
+
+  // ---------- ลากวาง ----------
+  const drop = $('#drop');
+  drop.onclick = () => $('#file').click();
+  drop.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('#file').click(); } };
+  $('#file').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+  ['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+  document.addEventListener('dragover', e => e.preventDefault());
+  document.addEventListener('drop', e => { e.preventDefault(); if (!drop.contains(e.target)) addFiles(e.dataTransfer.files); });
+
+  if (!window.BGS) document.body.innerHTML = '<p style="padding:20px">ไม่พบไฟล์ js/data.js ของเกม วางไฟล์นี้ไว้ในโฟลเดอร์ tools ของเกม</p>';
+  else render();
+})();
+</script>
+</body>
+</html>
