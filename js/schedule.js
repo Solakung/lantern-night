@@ -12,6 +12,7 @@
       { id: 'b3', w: 5, c: 'AFF_baibua>=25' },
       { id: 'b5', w: 6, c: 'SEEN_s11a || AFF_baibua>=40' },
       { id: 'b4', w: 7, c: 'AFF_baibua>=35' },
+      { id: 'bd', w: 8, c: 'AFF_baibua>=40' },
       { id: 'b7', w: 9, c: 'AFF_baibua>=45' },
       { id: 'b8', w: 10, c: 'AFF_baibua>=50' }
     ],
@@ -21,6 +22,7 @@
       { id: 'n3', w: 5, c: 'AFF_nina>=25' },
       { id: 'n4', w: 6, c: 'SEEN_s12a' },
       { id: 'n5', w: 7, c: 'AFF_nina>=35' },
+      { id: 'nd', w: 8, c: 'AFF_nina>=40' },
       { id: 'n7', w: 9, c: 'AFF_nina>=40' },
       { id: 'n8', w: 10, c: 'AFF_nina>=50' }
     ],
@@ -30,6 +32,7 @@
       { id: 'p3', w: 5, c: 'AFF_prang>=25' },
       { id: 'p4', w: 6, c: 'SEEN_s13a' },
       { id: 'p5', w: 7, c: 'AFF_prang>=35' },
+      { id: 'pd', w: 8, c: 'AFF_prang>=40' },
       { id: 'p7', w: 9, c: 'AFF_prang>=40' },
       { id: 'p8', w: 10, c: 'AFF_prang>=50' }
     ],
@@ -39,6 +42,7 @@
       { id: 'm3', w: 5, c: 'AFF_mintra>=25' },
       { id: 'm4', w: 6, c: 'SEEN_s14a && MT_RECEIPT' },
       { id: 'm5', w: 7, c: 'AFF_mintra>=35' },
+      { id: 'md', w: 8, c: 'AFF_mintra>=40' },
       { id: 'm7', w: 9, c: 'AFF_mintra>=40' },
       { id: 'm8', w: 10, c: 'AFF_mintra>=50' }
     ],
@@ -47,7 +51,8 @@
       { id: 'f2', w: 3, c: 'AFF_fasai>=15' },
       { id: 'f3', w: 5, c: 'AFF_fasai>=25' },
       { id: 'f4', w: 6, c: 'AFF_fasai>=30' },
-      { id: 'f5', w: 7, c: 'AFF_fasai>=35' }
+      { id: 'f5', w: 7, c: 'AFF_fasai>=35' },
+      { id: 'fd', w: 8, c: 'AFF_fasai>=40 && SEEN_f3' }
     ]
   };
   // ฉากที่เกิดเองตอนต้นสัปดาห์ เมื่อเงื่อนไขครบ (สัปดาห์ต่ำสุด-สูงสุด)
