@@ -127,6 +127,12 @@ button { font-family: inherit; cursor: pointer; }
 #title.pic .tbtn:not(:disabled) { background: rgba(12,16,30,.62); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
 #title.pic .tbtn:disabled { background: rgba(12,16,30,.4); }
 #title.pic .title-kicker { color: #ffc98a; }
+#title .title-menu { transition: opacity .6s ease; }
+#title.gate { cursor: pointer; }
+#title.gate .title-menu { opacity: 0; pointer-events: none; }
+.tap-hint { position: absolute; left: 0; right: 0; top: 62%; font: 400 16px var(--body); letter-spacing: .2em; color: var(--paper); opacity: 0; pointer-events: none; transition: opacity .4s; }
+#title.gate .tap-hint { opacity: 1; animation: tapPulse 2.2s ease-in-out infinite; }
+@keyframes tapPulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
 .title-umbrella { position: absolute; right: 22px; bottom: 18px; width: 46px; opacity: .55; }
 
 /* ตารางสัปดาห์ */

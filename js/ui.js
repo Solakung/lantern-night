@@ -55,6 +55,12 @@
     btn('แกลเลอรี', UI.openGallery);
     btn('ตั้งค่า', UI.openSettings);
     box.appendChild(menu);
+    // ครั้งแรกที่เปิดเว็บ ให้แตะก่อน เบราว์เซอร์จะยอมเปิดเพลงพร้อมเมนู
+    if (!UI._tapped) {
+      box.appendChild(el('div', 'tap-hint', 'แตะเพื่อเริ่ม'));
+      t.classList.add('gate');
+      t.onclick = () => { UI._tapped = true; t.classList.remove('gate'); t.onclick = null; };
+    } else { t.classList.remove('gate'); t.onclick = null; }
     t.appendChild(box);
     t.classList.remove('haunted', 'pic'); t.style.backgroundImage = '';
     // พื้นหลังหน้าแรก: ปกติใช้ภาพคืนโคมทะเล (CG05) ถ้าเคยเจอฉากจบห้องสมุด เปลี่ยนเป็น CG36
