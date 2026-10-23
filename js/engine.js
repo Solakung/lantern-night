@@ -111,6 +111,7 @@
     E.st.pc = 0;
     E.st.mode = 'scene';
     if (!id.startsWith('_')) E.st.v['SEEN_' + id] = 1;
+    if (!id.startsWith('_')) E.st.v.ROLL = Math.floor(Math.random() * 100);   // สุ่มทางแยกในฉาก (ฉากทั่วไปที่เล่นซ้ำได้)
     if (!id.startsWith('_')) { E.st.vis.bgm = null; Music.refresh(); }
     E.run();
   };
