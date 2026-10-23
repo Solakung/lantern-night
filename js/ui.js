@@ -68,8 +68,14 @@
     const src = haunt ? 'assets/cg/CG36.webp' : 'assets/cg/CG05.webp';
     const shade = haunt ? 'rgba(8,10,18,.55), rgba(8,10,18,.7)' : 'rgba(10,14,28,.35), rgba(10,14,28,.6)';
     const img = new Image();
-    img.onload = () => { t.classList.add('pic'); if (haunt) t.classList.add('haunted'); t.style.backgroundImage = 'linear-gradient(' + shade + '), url(' + src + ')'; };
-    img.onerror = () => { if (haunt) t.appendChild(el('div', 'title-umbrella', umbrellaSvg())); };
+    // ภาพหน้าแรกขึ้นแล้ว ค่อยแอบโหลดภาพช่วงต้นเกม (หรือจุดที่เซฟอัตโนมัติไว้) รอไว้ระหว่างผู้เล่นอยู่หน้านี้
+    const preload = () => {
+      const auto = Engine.readSlot('auto');
+      Preload.scenes((auto && auto.scene ? [auto.scene] : []).concat(['s00', 's01', 's02']));
+      Preload.idle();
+    };
+    img.onload = () => { t.classList.add('pic'); if (haunt) t.classList.add('haunted'); t.style.backgroundImage = 'linear-gradient(' + shade + '), url(' + src + ')'; preload(); };
+    img.onerror = () => { if (haunt) t.appendChild(el('div', 'title-umbrella', umbrellaSvg())); preload(); };
     img.src = src;
   };
 
@@ -122,7 +128,9 @@
           // ไม่มีภาพเวอร์ชันกลางคืน/เย็น ใช้ภาพหลักแล้วย้อมสีแทน
           const fallback = vis.bgv ? () => { bg.classList.add('tint-' + vis.bgv); loadImg(img, 'assets/bg/' + id); } : null;
           bg.classList.remove('tint-night', 'tint-sunset');
-          loadImg(img, 'assets/bg/' + key, fallback);
+          // รู้อยู่แล้วว่าไม่มีภาพเวอร์ชันนี้ ข้ามไปย้อมสีเลย ไม่ต้องลองโหลดให้เสียเวลา
+          if (vis.bgv && window.BG_VARIANTS && !BG_VARIANTS.includes(key)) fallback();
+          else loadImg(img, 'assets/bg/' + key, fallback);
           bg.appendChild(img);
         }
       }

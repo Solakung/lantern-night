@@ -113,6 +113,7 @@
     if (!id.startsWith('_')) E.st.v['SEEN_' + id] = 1;
     if (!id.startsWith('_')) E.st.v.ROLL = Math.floor(Math.random() * 100);   // สุ่มทางแยกในฉาก (ฉากทั่วไปที่เล่นซ้ำได้)
     if (!id.startsWith('_')) { E.st.vis.bgm = null; Music.refresh(); }
+    Preload.ahead(id.startsWith('_') ? null : id);
     E.run();
   };
 
@@ -296,6 +297,7 @@
     UI.enterGame();
     UI.renderAll();
     Music.refresh();
+    Preload.ahead(E.st.scene);
     if (E.st.mode === 'planner') return UI.showPlanner();
     if (!E.st.scene) return E.next();
     const ins = sceneOf(E.st.scene).code[E.st.pc];
