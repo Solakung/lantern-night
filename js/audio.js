@@ -34,7 +34,7 @@
   function play(name) {
     want = name;
     if (!unlocked) return;
-    if (name === curName) { if (cur) fade(cur, vol()); return; }
+    if (name === curName) { if (cur) { if (cur.paused) cur.play().catch(() => {}); fade(cur, vol()); } return; }
     const old = cur;
     curName = name; cur = null;
     if (old) fade(old, 0, () => { old.pause(); old.src = ''; });
@@ -43,7 +43,10 @@
     a.loop = true; a.volume = 0;
     a.onerror = () => { missing[name] = true; if (cur === a) cur = null; };
     cur = a;
-    a.play().then(() => fade(a, vol())).catch(() => {});
+    a.play().then(() => fade(a, vol())).catch(err => {
+      // เบราว์เซอร์ยังไม่ยอมให้เล่น (มือถือต้องรอให้ผู้เล่นแตะจอก่อน) รอแตะครั้งถัดไปแล้วลองใหม่
+      if (err && err.name === 'NotAllowedError') { if (cur === a) { cur = null; curName = null; } unlocked = false; }
+    });
   }
 
   const Music = {
@@ -75,5 +78,5 @@
     }
   };
   window.Music = Music;
-  if (window.addEventListener) ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, Music.unlock, { once: false, passive: true }));
+  if (window.addEventListener) ['pointerup', 'touchend', 'click', 'keydown'].forEach(ev => window.addEventListener(ev, Music.unlock, { once: false, passive: true }));
 })();
