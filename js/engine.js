@@ -260,6 +260,8 @@
     E.global.end[id] = 1;
     E.global.clears = (E.global.clears || 0) + 1;
     if (id === 'E_LIBRARY' || id === 'E_F_BAD') { E.global.umbrella = true; E.global.cg.CG36 = 1; }
+    // ภาพเฉลยฉากเปิดเกม ปลดล็อกเมื่อจบเรื่องของฟ้าใส
+    if ((info.route === 'fasai' || id === 'E_RELEASE') && !E.global.cg.CG45) { E.global.cg.CG45 = 1; setTimeout(() => UI.toast('ปลดล็อกภาพพิเศษในแกลเลอรี: รอยยิ้มที่ท่าเรือ'), 1500); }
     E.saveGlobal();
     try { localStorage.removeItem('yd_save_auto'); } catch (e) {}
     E.st.mode = 'ending';
