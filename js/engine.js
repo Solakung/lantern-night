@@ -25,7 +25,7 @@
 
   const E = window.Engine = {
     st: null,
-    settings: { speed: 30, auto: 1500, size: 1, skipUnread: false },
+    settings: { speed: 30, auto: 1500, size: 1, skipUnread: false, music: 0.6 },
     global: { cg: {}, end: {}, read: {}, clears: 0, umbrella: false },
     autoOn: false, skipOn: false, typing: false, waiting: null, log: []
   };
@@ -111,6 +111,7 @@
     E.st.pc = 0;
     E.st.mode = 'scene';
     if (!id.startsWith('_')) E.st.v['SEEN_' + id] = 1;
+    if (!id.startsWith('_')) { E.st.vis.bgm = null; Music.refresh(); }
     E.run();
   };
 
@@ -162,6 +163,7 @@
         case 'hideall': E.st.vis.spr = {}; UI.renderSprites(); E.st.pc++; break;
         case 'set': E.applyEffects(ins.eff); E.st.pc++; break;
         case 'fx': setFx(ins.name); E.st.pc++; break;
+        case 'bgm': E.st.vis.bgm = ins.id === 'auto' ? null : ins.id; Music.refresh(); E.st.pc++; break;
         case 'if':
           if (E.test(ins.cond)) { const r = jumpLabel(ins.target); if (r === 'scene') return; if (!r) E.st.pc++; }
           else E.st.pc++;
@@ -247,6 +249,7 @@
     else if (name === 'black') fx.black = 1;
     else UI.oneShot(name);
     UI.renderFx();
+    Music.refresh();
   }
 
   // ---------- ฉากจบ ----------
@@ -287,6 +290,7 @@
     E.autoOn = E.skipOn = false;
     UI.enterGame();
     UI.renderAll();
+    Music.refresh();
     if (E.st.mode === 'planner') return UI.showPlanner();
     if (!E.st.scene) return E.next();
     const ins = sceneOf(E.st.scene).code[E.st.pc];

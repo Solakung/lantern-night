@@ -30,6 +30,7 @@
 
   function applySettings() {
     document.documentElement.style.setProperty('--fs', (Engine.settings.size || 1));
+    if (window.Music) Music.setVolume();
   }
 
   // ---------- หน้าแรก ----------
@@ -39,6 +40,7 @@
     hideAll();
     const t = $('#title');
     t.classList.remove('hidden');
+    Music.play('title');
     const hasAuto = !!Engine.readSlot('auto');
     t.innerHTML = '';
     const box = el('div', 'title-inner');
@@ -264,6 +266,7 @@
   const mood = o => o < 25 ? '' : o < 40 ? 'บางครั้งรู้สึกเหมือนมีคนมองอยู่' : o < 60 ? 'ข้อความจากเบอร์ไม่รู้จักมาบ่อยขึ้น' : o < 75 ? 'ร่มสีขาวโผล่ในสายตาบ่อยเกินไปแล้ว' : 'ไม่ว่าจะไปที่ไหน เหมือนเธอรู้ก่อนเสมอ';
 
   UI.showPlanner = function () {
+    Music.refresh();
     stopTimers();
     const st = Engine.st, v = st.v;
     $('#textbox').classList.add('hidden');
@@ -476,6 +479,7 @@
     row('ความเร็วตัวอักษร', [['ช้า', 50], ['ปกติ', 30], ['เร็ว', 12], ['ทันที', 0]], 'speed');
     row('หน่วงโหมดอัตโนมัติ', [['สั้น', 800], ['ปกติ', 1500], ['ยาว', 2500]], 'auto');
     row('ขนาดตัวอักษร', [['เล็ก', 0.9], ['ปกติ', 1], ['ใหญ่', 1.15]], 'size');
+    row('เสียงเพลง', [['ปิด', 0], ['เบา', 0.3], ['ปกติ', 0.6], ['ดัง', 1]], 'music');
     row('ข้ามข้อความที่ยังไม่อ่าน', [['ไม่', false], ['ข้าม', true]], 'skipUnread');
   };
 
