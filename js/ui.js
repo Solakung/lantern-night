@@ -284,57 +284,78 @@
     const p = $('#planner');
     p.classList.remove('hidden');
     p.innerHTML = '';
-    const wrap = el('div', 'pl-wrap');
-    const head = el('div', 'pl-head');
-    head.appendChild(el('div', 'pl-week', 'สัปดาห์ที่ <b>' + v.WEEK + '</b><span>/12</span>'));
-    head.appendChild(el('div', 'pl-left', 'อีก ' + (12 - v.WEEK) + ' สัปดาห์ถึงคืนโคมทะเล'));
-    wrap.appendChild(head);
+    // สมุดจดตารางของภูมิ
+    const book = el('div', 'pl-book');
+    const page = el('div', 'pl-page');
 
-    const stats = el('div', 'pl-stats');
-    ['KNOW', 'BODY', 'ART', 'MIND', 'ENERGY'].forEach(k => {
-      const row = el('div', 'stat' + (k === 'ENERGY' ? ' energy' : ''));
-      row.innerHTML = '<span>' + STAT_NAMES[k] + '</span><div class="bar"><i style="width:' + (v[k] || 0) + '%"></i></div><b>' + (v[k] || 0) + '</b>';
-      stats.appendChild(row);
-    });
-    wrap.appendChild(stats);
+    const top = el('div', 'pl-top');
+    top.appendChild(el('div', 'pl-tape'));
+    top.appendChild(el('div', 'pl-week', 'สัปดาห์ที่ <b>' + v.WEEK + '</b>'));
+    const left = 12 - v.WEEK;
+    top.appendChild(el('div', 'pl-left', left > 0 ? 'อีก ' + left + ' สัปดาห์ถึงคืนโคมทะเล' : 'คืนนี้คืนโคมทะเล'));
+    const cal = el('div', 'pl-cal');
+    for (let w = 1; w <= 12; w++) {
+      const c = el('span', w < v.WEEK ? 'done' : w === v.WEEK ? 'now' : '', w === 12 ? '🏮' : String(w));
+      cal.appendChild(c);
+    }
+    top.appendChild(cal);
+    page.appendChild(top);
 
-    const rel = el('div', 'pl-rel');
-    GIRLS.forEach(g => {
-      const a = v['AFF_' + g] || 0;
-      const r = el('div', 'rel', '<i style="background:' + CHARS[g].color + '"></i>' + CHARS[g].name + '<small>' + tier(a) + '</small>');
-      rel.appendChild(r);
-    });
-    wrap.appendChild(rel);
-    const m = mood(v.OBS);
-    if (m) wrap.appendChild(el('div', 'pl-mood', esc(m)));
-
-    const slots = el('div', 'pl-slots');
+    const grid = el('div', 'pl-grid');
+    // ตารางกิจกรรม
+    const table = el('div', 'pl-table');
+    table.appendChild(el('div', 'pl-th', '<span>ช่วงเวลา</span><span>จะทำอะไร</span>'));
     st.plan.forEach((act, i) => {
-      const s = el('button', 'slot' + (act ? ' set' : ''));
       const o = act && Schedule.options(i).find(x => x.id === act);
-      s.innerHTML = '<span>' + SLOT_NAMES[i] + '</span><b>' + (o ? esc(o.name) : 'เลือกกิจกรรม') + '</b>';
-      s.onclick = () => pickSlot(i);
-      slots.appendChild(s);
+      const row = el('button', 'pl-row' + (o ? ' set' : ''));
+      if (o && o.girl) { row.classList.add('girl'); row.style.setProperty('--c', CHARS[o.girl].color); }
+      row.innerHTML = '<span class="pl-when">' + SLOT_NAMES[i] + '</span><span class="pl-what">' +
+        (o ? esc(o.name) + (o.place ? '<small>' + esc(o.place) + '</small>' : '') : '<em>แตะเพื่อเขียน...</em>') + '</span>';
+      row.onclick = () => pickSlot(i);
+      table.appendChild(row);
     });
-    wrap.appendChild(slots);
-
     const est = st.plan.reduce((s, a) => {
       const o = a && ACTIVITIES.find(x => x.id === a);
       return s + (o ? (o.energy || 0) - (o.eff.ENERGY || 0) : a ? 10 : 0);
     }, 0);
-    wrap.appendChild(el('div', 'pl-est', 'พลังงานที่จะใช้: ' + est + ' / มีอยู่ ' + v.ENERGY + (est > v.ENERGY ? ' <em>· อาจหมดแรงกลางสัปดาห์</em>' : '')));
+    table.appendChild(el('div', 'pl-est', 'แรงที่จะใช้ ' + est + ' จาก ' + v.ENERGY + (est > v.ENERGY ? '<em>อาจหมดแรงกลางสัปดาห์!</em>' : '')));
+    grid.appendChild(table);
 
-    const go = el('button', 'tbtn primary pl-go', 'เริ่มสัปดาห์');
+    const side = el('div', 'pl-side');
+    const n1 = el('div', 'note yellow');
+    n1.appendChild(el('div', 'note-h', 'สภาพตัวเอง'));
+    ['KNOW', 'BODY', 'ART', 'MIND', 'ENERGY'].forEach(k => {
+      const row = el('div', 'stat' + (k === 'ENERGY' ? ' energy' : ''));
+      row.innerHTML = '<span>' + STAT_NAMES[k] + '</span><div class="bar"><i style="width:' + (v[k] || 0) + '%"></i></div><b>' + (v[k] || 0) + '</b>';
+      n1.appendChild(row);
+    });
+    side.appendChild(n1);
+    const n2 = el('div', 'note pink');
+    n2.appendChild(el('div', 'note-h', 'คนบนเกาะ'));
+    GIRLS.forEach(g => {
+      const a = v['AFF_' + g] || 0;
+      n2.appendChild(el('div', 'rel', '<i style="background:' + CHARS[g].color + '"></i><span>' + CHARS[g].name + '</span><small>' + tier(a) + '</small>'));
+    });
+    side.appendChild(n2);
+    grid.appendChild(side);
+    page.appendChild(grid);
+
+    const m = mood(v.OBS);
+    if (m) page.appendChild(el('div', 'pl-mood', esc(m)));
+
+    const go = el('button', 'pl-go', 'เริ่มสัปดาห์ →');
     go.disabled = st.plan.some(x => !x);
     go.onclick = () => Schedule.confirmPlan(st.plan.slice());
-    wrap.appendChild(go);
-    p.appendChild(wrap);
+    page.appendChild(go);
+    book.appendChild(page);
+    p.appendChild(book);
   };
   UI.hidePlanner = () => $('#planner').classList.add('hidden');
 
   function pickSlot(i) {
     const st = Engine.st;
     const m = modal(SLOT_NAMES[i]);
+    m.box.classList.add('paper');
     const opts = Schedule.options(i);
     const list = el('div', 'opt-list');
     opts.forEach(o => {
@@ -386,7 +407,7 @@
     bg.onclick = e => { if (e.target === bg) closeModal(); };
     $('#game').appendChild(bg);
     stopTimers();
-    return { body };
+    return { body, box: m };
   }
   function closeModal() {
     const m = document.querySelector('.modal-bg');
