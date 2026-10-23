@@ -170,7 +170,8 @@
       Engine.refreshDerived();
       vv.ROUTE = vv.ROUTE_FASAI ? 4 : vv.TOP;
       const q = [];
-      if (!vv.FAIL_FINAL) q.push({ k: 'scene', id: NIGHT_BEFORE[vv.ROUTE] });
+      // สอบตก: ไม่ได้ฉากคืนก่อนงานเต็มๆ แต่ยังได้ข้อความสั้นที่มีคำใบ้ของไคลแมกซ์
+      q.push({ k: 'scene', id: NIGHT_BEFORE[vv.ROUTE] + (vv.FAIL_FINAL ? 's' : '') });
       q.push({ k: 'scene', id: 's20' });
       Engine.st.queue = q.concat(Engine.st.queue);
     }
