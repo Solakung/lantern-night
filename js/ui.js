@@ -343,6 +343,12 @@
     GIRLS.forEach(g => {
       const a = v['AFF_' + g] || 0;
       n2.appendChild(el('div', 'rel', '<i style="background:' + CHARS[g].color + '"></i><span>' + CHARS[g].name + '</span><small>' + tier(a) + '</small>'));
+      const rp = ROUTE_PROGRESS[g];
+      if (rp && v['SEEN_' + rp.seen]) {
+        const n = Math.max(0, Math.min(rp.max, v[rp.k] || 0));
+        n2.appendChild(el('div', 'rel-prog', esc(rp.label) + ' ' + '●'.repeat(n) + '○'.repeat(rp.max - n) +
+          (rp.dec && v[rp.dec] ? ' · <b>เธอเลือกทางของตัวเองแล้ว</b>' : '')));
+      }
     });
     side.appendChild(n2);
     grid.appendChild(side);
@@ -394,6 +400,8 @@
     box.appendChild(el('h2', 'end-name', esc(info.name)));
     const got = ENDINGS.filter(x => Engine.global.end[x.id]).length;
     box.appendChild(el('p', 'end-count', 'เก็บฉากจบแล้ว ' + got + ' / ' + ENDINGS.length));
+    const meta = ENDINGS.find(x => x.id === info.id);
+    if (meta && meta.hint) box.appendChild(el('p', 'end-hint', '<b>ยังมีทางอื่นอีก</b> ' + esc(meta.hint)));
     const b = el('button', 'tbtn primary', 'กลับหน้าแรก');
     b.onclick = UI.showTitle;
     box.appendChild(b);
@@ -485,7 +493,8 @@
     ENDINGS.forEach(x => {
       const ok = Engine.global.end[x.id];
       list.appendChild(el('div', 'end-row' + (ok ? '' : ' locked'),
-        '<i>' + x.type + '</i><span>' + (ok ? esc(x.name) : '???') + '</span><small>' + (x.route === 'main' ? 'บทหลัก' : CHARS[x.route].name) + '</small>'));
+        '<i>' + x.type + '</i><span>' + (ok ? esc(x.name) : '???') + '</span><small>' + (x.route === 'main' ? 'บทหลัก' : CHARS[x.route].name) + '</small>' +
+        (ok && x.hint ? '<em>' + esc(x.hint) + '</em>' : '')));
     });
     m.body.appendChild(list);
   };

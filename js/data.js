@@ -64,25 +64,34 @@ window.CGS = {
 };
 
 // ฉากจบทั้งหมด (ฉากที่ยังไม่มีในเวอร์ชันนี้จะแสดงเป็น ??? ในแกลเลอรี)
+// ความคืบหน้าของแต่ละรูท แสดงในตารางสัปดาห์ (โชว์หลังเริ่มรูทแล้ว ไม่บอกตัวเลขตรงๆ)
+window.ROUTE_PROGRESS = {
+  baibua: { k: 'MEMORY', label: 'เรื่องที่นึกออก', max: 4, seen: 'b1', dec: 'BB_DECIDE' },
+  nina: { k: 'SONG', label: 'เนื้อเพลง', max: 4, seen: 'n1', dec: 'NN_DECIDE' },
+  prang: { k: 'SKETCH', label: 'ภาพในสมุด', max: 4, seen: 'p1', dec: 'PR_DECIDE' },
+  mintra: { k: 'TRUST', label: 'ความไว้ใจ', max: 4, seen: 'm1', dec: 'MT_DECIDE' },
+  fasai: { k: 'HONEST', label: 'คำพูดตรงๆ', max: 3, seen: 'f1' }
+};
+
 window.ENDINGS = [
   { id: 'E_B_BEST', name: 'ร้านขนมวันพุธ', route: 'baibua', type: 'Best' },
-  { id: 'E_B_GOOD', name: 'ทาร์ตชิ้นที่เก็บไว้', route: 'baibua', type: 'Good' },
-  { id: 'E_B_BAD', name: 'จดหมายที่ไม่ได้เปิด', route: 'baibua', type: 'Bad' },
+  { id: 'E_B_GOOD', name: 'ทาร์ตชิ้นที่เก็บไว้', route: 'baibua', type: 'Good', hint: 'ใบบัวยังรอให้คุณนึกเรื่องเก่าๆ ออกอีกหลายเรื่อง และเรื่องร้านของแม่ ลองให้เธอเป็นคนตัดสินใจเอง' },
+  { id: 'E_B_BAD', name: 'จดหมายที่ไม่ได้เปิด', route: 'baibua', type: 'Bad', hint: 'ลองนึกดูว่าเวลากลัว ใบบัวเคยบอกว่าตัวเองจะไปหลบที่ไหน' },
   { id: 'E_N_BEST', name: 'เพลงที่ไม่มีชื่อ', route: 'nina', type: 'Best' },
-  { id: 'E_N_GOOD', name: 'ห้าสายก็พอ', route: 'nina', type: 'Good' },
-  { id: 'E_N_BAD', name: 'แอมป์ที่เงียบ', route: 'nina', type: 'Bad' },
+  { id: 'E_N_GOOD', name: 'ห้าสายก็พอ', route: 'nina', type: 'Good', hint: 'เพลงยังขาดบางท่อน และนีน่ายังไม่ได้เลือกทางของตัวเอง' },
+  { id: 'E_N_BAD', name: 'แอมป์ที่เงียบ', route: 'nina', type: 'Bad', hint: 'คืนก่อนงาน นีน่าขอให้คุณทำแค่อย่างเดียว' },
   { id: 'E_P_BEST', name: 'ภาพเหมือนตัวเอง', route: 'prang', type: 'Best' },
-  { id: 'E_P_GOOD', name: 'สมุดเล่มสีส้ม', route: 'prang', type: 'Good' },
-  { id: 'E_P_BAD', name: 'หน้าที่ว่าง', route: 'prang', type: 'Bad' },
+  { id: 'E_P_GOOD', name: 'สมุดเล่มสีส้ม', route: 'prang', type: 'Good', hint: 'สมุดเล่มสีส้มยังมีหน้าว่าง และภาพบนยอดประภาคารยังไม่มีชื่อปราง' },
+  { id: 'E_P_BAD', name: 'หน้าที่ว่าง', route: 'prang', type: 'Bad', hint: 'ปรางจำคนจากสิ่งที่ไม่ใช่ใบหน้า ลองนึกว่าเธอเคยบอกว่าจำคุณจากอะไร' },
   { id: 'E_M_BEST', name: 'คนที่ได้ดูโคม', route: 'mintra', type: 'Best' },
-  { id: 'E_M_GOOD', name: 'ผู้ช่วยประธาน', route: 'mintra', type: 'Good' },
-  { id: 'E_M_BAD', name: 'เช้าที่ไม่มีใครมาเปิดประตู', route: 'mintra', type: 'Bad' },
+  { id: 'E_M_GOOD', name: 'ผู้ช่วยประธาน', route: 'mintra', type: 'Good', hint: 'มินตรายังไม่ไว้ใจพอจะวางงานลง และยังไม่ได้พูดกับพ่อ' },
+  { id: 'E_M_BAD', name: 'เช้าที่ไม่มีใครมาเปิดประตู', route: 'mintra', type: 'Bad', hint: 'คนที่ทำทุกอย่างคนเดียว จะรับมือคืนเดียวไม่ไหว ลองช่วยเธอแบ่งงานตั้งแต่ก่อนถึงงาน' },
   { id: 'E_F_BEST', name: 'บทที่ยังไม่ได้เขียน', route: 'fasai', type: 'Best' },
-  { id: 'E_F_GOOD', name: 'ลาก่อนที่ท่าเรือ', route: 'fasai', type: 'Good' },
-  { id: 'E_F_BAD', name: 'ห้องสมุดที่ไม่มีวันปิด', route: 'fasai', type: 'Bad' },
-  { id: 'E_LANTERN', name: 'โคมดวงคู่', route: 'main', type: 'Good' },
+  { id: 'E_F_GOOD', name: 'ลาก่อนที่ท่าเรือ', route: 'fasai', type: 'Good', hint: 'พูดความจริงกับฟ้าใสให้บ่อยกว่านี้ แล้วอยู่ข้างเธอให้นานพอ' },
+  { id: 'E_F_BAD', name: 'ห้องสมุดที่ไม่มีวันปิด', route: 'fasai', type: 'Bad', hint: 'การยอมให้เธอทุกอย่าง ไม่ใช่การช่วยเธอ' },
+  { id: 'E_LANTERN', name: 'โคมดวงคู่', route: 'main', type: 'Good', hint: 'หลักฐานที่เก็บไว้ อาจพาไปสู่การคุยกับใครบางคนตรงๆ' },
   { id: 'E_RELEASE', name: 'ปล่อยมือ', route: 'main', type: 'True' },
-  { id: 'E_LIBRARY', name: 'ห้องสมุดที่ไม่มีวันปิด (บทหลัก)', route: 'main', type: 'Bad' }
+  { id: 'E_LIBRARY', name: 'ห้องสมุดที่ไม่มีวันปิด (บทหลัก)', route: 'main', type: 'Bad', hint: 'ทุกครั้งที่ทำให้เธอหึง เธอจดไว้หมด' }
 ];
 
 // กิจกรรม: slots = ช่วงที่เลือกได้ (0 บ่าย, 1 เย็น, 2 เสาร์, 3 อาทิตย์)

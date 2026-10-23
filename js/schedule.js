@@ -14,6 +14,7 @@
       { id: 'b4', w: 7, c: 'AFF_baibua>=35' },
       { id: 'bd', w: 8, c: 'AFF_baibua>=40' },
       { id: 'b7', w: 9, c: 'AFF_baibua>=45' },
+      { id: 'bx', w: 9, c: 'AFF_baibua>=45' },
       { id: 'b8', w: 10, c: 'AFF_baibua>=50' }
     ],
     nina: [
@@ -24,6 +25,7 @@
       { id: 'n5', w: 7, c: 'AFF_nina>=35' },
       { id: 'nd', w: 8, c: 'AFF_nina>=40' },
       { id: 'n7', w: 9, c: 'AFF_nina>=40' },
+      { id: 'nx', w: 9, c: 'AFF_nina>=40' },
       { id: 'n8', w: 10, c: 'AFF_nina>=50' }
     ],
     prang: [
@@ -34,6 +36,7 @@
       { id: 'p5', w: 7, c: 'AFF_prang>=35' },
       { id: 'pd', w: 8, c: 'AFF_prang>=40' },
       { id: 'p7', w: 9, c: 'AFF_prang>=40' },
+      { id: 'px', w: 9, c: 'AFF_prang>=40' },
       { id: 'p8', w: 10, c: 'AFF_prang>=50' }
     ],
     mintra: [
@@ -44,6 +47,7 @@
       { id: 'm5', w: 7, c: 'AFF_mintra>=35' },
       { id: 'md', w: 8, c: 'AFF_mintra>=40' },
       { id: 'm7', w: 9, c: 'AFF_mintra>=40' },
+      { id: 'mx', w: 9, c: 'AFF_mintra>=40' },
       { id: 'm8', w: 10, c: 'AFF_mintra>=50' }
     ],
     fasai: [
