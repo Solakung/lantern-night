@@ -54,7 +54,14 @@
     btn('ตั้งค่า', UI.openSettings);
     box.appendChild(menu);
     t.appendChild(box);
-    if (Engine.global.umbrella) t.appendChild(el('div', 'title-umbrella', umbrellaSvg()));
+    t.classList.remove('haunted'); t.style.backgroundImage = '';
+    if (Engine.global.umbrella) {
+      // หลังเคยเจอฉากจบห้องสมุด หน้าแรกเปลี่ยนเป็น CG36 ถ้ายังไม่มีภาพ ใช้ร่มวาดแทน
+      const img = new Image();
+      img.onload = () => { t.classList.add('haunted'); t.style.backgroundImage = 'linear-gradient(rgba(8,10,18,.55), rgba(8,10,18,.7)), url(assets/cg/CG36.webp)'; };
+      img.onerror = () => t.appendChild(el('div', 'title-umbrella', umbrellaSvg()));
+      img.src = 'assets/cg/CG36.webp';
+    }
   };
 
   function umbrellaSvg() {

@@ -121,6 +121,8 @@ button { font-family: inherit; cursor: pointer; }
 .tbtn:disabled { opacity: .35; cursor: default; }
 .tbtn.primary { background: var(--lantern); border-color: var(--lantern); color: var(--night); font-weight: 500; }
 .tbtn.primary:hover:not(:disabled) { background: #f2b46a; }
+#title.haunted { background-size: cover; background-position: center; }
+#title.haunted::before { display: none; }
 .title-umbrella { position: absolute; right: 22px; bottom: 18px; width: 46px; opacity: .55; }
 
 /* ตารางสัปดาห์ */

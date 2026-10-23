@@ -254,7 +254,7 @@
     const info = ENDINGS.find(e => e.id === id) || { name: id, type: '' };
     E.global.end[id] = 1;
     E.global.clears = (E.global.clears || 0) + 1;
-    if (id === 'E_LIBRARY' || id === 'E_F_BAD') E.global.umbrella = true;
+    if (id === 'E_LIBRARY' || id === 'E_F_BAD') { E.global.umbrella = true; E.global.cg.CG36 = 1; }
     E.saveGlobal();
     try { localStorage.removeItem('yd_save_auto'); } catch (e) {}
     E.st.mode = 'ending';
