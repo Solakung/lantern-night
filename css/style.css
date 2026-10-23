@@ -121,8 +121,12 @@ button { font-family: inherit; cursor: pointer; }
 .tbtn:disabled { opacity: .35; cursor: default; }
 .tbtn.primary { background: var(--lantern); border-color: var(--lantern); color: var(--night); font-weight: 500; }
 .tbtn.primary:hover:not(:disabled) { background: #f2b46a; }
-#title.haunted { background-size: cover; background-position: center; }
-#title.haunted::before { display: none; }
+#title.pic { background-size: cover; background-position: center; }
+#title.pic::before { display: none; }
+#title.pic .title-inner { text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+#title.pic .tbtn:not(:disabled) { background: rgba(12,16,30,.62); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+#title.pic .tbtn:disabled { background: rgba(12,16,30,.4); }
+#title.pic .title-kicker { color: #ffc98a; }
 .title-umbrella { position: absolute; right: 22px; bottom: 18px; width: 46px; opacity: .55; }
 
 /* ตารางสัปดาห์ */

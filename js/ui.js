@@ -56,14 +56,15 @@
     btn('ตั้งค่า', UI.openSettings);
     box.appendChild(menu);
     t.appendChild(box);
-    t.classList.remove('haunted'); t.style.backgroundImage = '';
-    if (Engine.global.umbrella) {
-      // หลังเคยเจอฉากจบห้องสมุด หน้าแรกเปลี่ยนเป็น CG36 ถ้ายังไม่มีภาพ ใช้ร่มวาดแทน
-      const img = new Image();
-      img.onload = () => { t.classList.add('haunted'); t.style.backgroundImage = 'linear-gradient(rgba(8,10,18,.55), rgba(8,10,18,.7)), url(assets/cg/CG36.webp)'; };
-      img.onerror = () => t.appendChild(el('div', 'title-umbrella', umbrellaSvg()));
-      img.src = 'assets/cg/CG36.webp';
-    }
+    t.classList.remove('haunted', 'pic'); t.style.backgroundImage = '';
+    // พื้นหลังหน้าแรก: ปกติใช้ภาพคืนโคมทะเล (CG05) ถ้าเคยเจอฉากจบห้องสมุด เปลี่ยนเป็น CG36
+    const haunt = !!Engine.global.umbrella;
+    const src = haunt ? 'assets/cg/CG36.webp' : 'assets/cg/CG05.webp';
+    const shade = haunt ? 'rgba(8,10,18,.55), rgba(8,10,18,.7)' : 'rgba(10,14,28,.35), rgba(10,14,28,.6)';
+    const img = new Image();
+    img.onload = () => { t.classList.add('pic'); if (haunt) t.classList.add('haunted'); t.style.backgroundImage = 'linear-gradient(' + shade + '), url(' + src + ')'; };
+    img.onerror = () => { if (haunt) t.appendChild(el('div', 'title-umbrella', umbrellaSvg())); };
+    img.src = src;
   };
 
   function umbrellaSvg() {
