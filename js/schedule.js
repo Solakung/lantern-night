@@ -78,7 +78,7 @@
   const S = window.Schedule = { ROUTES, RANDOM };
 
   S.start = function () {
-    Engine.st.queue = ['s00', 's01', 's02', 's03', 's04', 's05', 's06']
+    Engine.st.queue = ['s00', 's01', 's02', 's03', 's05', 's04', 's04b', 's06', 'w1a', 'w1b', 'w1c', 'w1d']
       .map(id => ({ k: 'scene', id })).concat([{ k: 'nextWeek' }]);
   };
 
@@ -245,10 +245,10 @@
     if (a.id === 'jedi') lines.push.apply(lines, jediLines());
     else if (a.lines.length) lines.push(a.lines[Math.floor(Math.random() * a.lines.length)]);
     if (a.id === 'read' && Math.random() < 0.3) lines.push(
-      'ฟ้าใส[happy]: (วางที่คั่นหนังสือรูปดาวข้างแขน) ใช้อันนี้นะคะ อันเก่าของเธอขาดแล้ว',
+      '* ที่คั่นหนังสือรูปดาวอันหนึ่งวางลงข้างแขนผม', 'ฟ้าใส[happy]: ใช้อันนี้นะคะ อันเก่าของเธอขาดแล้ว',
       '* ผมไม่เคยบอกใครว่าที่คั่นหนังสือขาด');
     if (a.id === 'meditate' && vv.OBS >= 60) {
-      lines.push('* โทรศัพท์สั่นหนึ่งครั้ง ฉันไม่หยิบขึ้นมาดู และรู้สึกว่าตัวเองตัดสินใจถูก', '@set MIND+2');
+      lines.push('* โทรศัพท์สั่นหนึ่งครั้ง ผมไม่หยิบขึ้นมาดู และรู้สึกว่าตัวเองตัดสินใจถูก', '@set MIND+2');
     }
     if (low) lines.push('* ร่างกายล้าจนทำได้ไม่เต็มที่');
     lines.push('> ' + a.name + ' — ' + parts.join(' · '));

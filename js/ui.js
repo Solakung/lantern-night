@@ -119,7 +119,10 @@
           const img = el('img');
           img.alt = '';
           img.onload = () => ph.remove();
-          loadImg(img, 'assets/bg/' + key, vis.bgv ? () => loadImg(img, 'assets/bg/' + id) : null);
+          // ไม่มีภาพเวอร์ชันกลางคืน/เย็น ใช้ภาพหลักแล้วย้อมสีแทน
+          const fallback = vis.bgv ? () => { bg.classList.add('tint-' + vis.bgv); loadImg(img, 'assets/bg/' + id); } : null;
+          bg.classList.remove('tint-night', 'tint-sunset');
+          loadImg(img, 'assets/bg/' + key, fallback);
           bg.appendChild(img);
         }
       }
@@ -178,7 +181,7 @@
 
   UI.renderFx = function () {
     const fx = Engine.st.vis.fx || {};
-    $('#fx').className = 'layer' + (fx.rain ? ' rain' : '') + (fx.dark ? ' dark' : '') + (fx.black ? ' black' : '');
+    $('#fx').className = 'layer' + (fx.rain ? ' rain' : '') + (fx.dark ? ' dark' : '') + (fx.black ? ' black' : '') + (fx.night ? ' night' : '');
   };
   UI.oneShot = function (name) {
     const g = $('#game');

@@ -245,7 +245,9 @@
     if (name === 'rain') fx.rain = 1;
     else if (name === 'norain') delete fx.rain;
     else if (name === 'dark') fx.dark = 1;
-    else if (name === 'light') { delete fx.dark; delete fx.black; }
+    else if (name === 'light') { delete fx.dark; delete fx.black; delete fx.night; }
+    else if (name === 'night') fx.night = 1;
+    else if (name === 'day') delete fx.night;
     else if (name === 'black') fx.black = 1;
     else UI.oneShot(name);
     UI.renderFx();

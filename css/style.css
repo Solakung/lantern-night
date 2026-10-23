@@ -53,6 +53,12 @@ button { font-family: inherit; cursor: pointer; }
 #fx { z-index: 3; pointer-events: none; transition: background .6s; }
 #fx.dark { background: radial-gradient(ellipse at center, transparent 30%, rgba(5,0,15,.7) 100%); }
 #fx.black { background: #000; }
+#bg.tint-night img { filter: brightness(.5) saturate(.7); }
+#bg.tint-night::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,24,80,.42), rgba(6,10,40,.5)); pointer-events: none; }
+#bg.tint-sunset img { filter: sepia(.35) saturate(1.25) brightness(.92); }
+#bg.tint-sunset::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,140,60,.18), rgba(120,40,60,.22)); pointer-events: none; }
+#fx.night { background: linear-gradient(180deg, rgba(12,22,70,.5), rgba(6,10,40,.58)); }
+#fx.night.dark { background: radial-gradient(ellipse at center, rgba(12,22,70,.4) 30%, rgba(5,0,15,.8) 100%); }
 #fx.rain::after { content: ''; position: absolute; inset: -50% 0 0; opacity: .45;
   background-image: repeating-linear-gradient(105deg, transparent 0 14px, rgba(220,235,255,.55) 14px 15px, transparent 15px 31px);
   background-size: 120px 120px; animation: rain .35s linear infinite; }

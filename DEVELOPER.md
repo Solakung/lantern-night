@@ -93,7 +93,7 @@
 @if OBS>=40 -> ป้าย              กระโดดถ้าเงื่อนไขจริง
 @goto ป้าย   @jump ชื่อฉาก   @end
 @set MEMORY+1, HAS_LETTER=1
-@fx rain | norain | dark | light | black | shake | flash
+@fx rain | norain | dark | light | black | shake | flash | night | day
 @bgm horror | off | auto        บังคับเพลง (ปกติเกมเลือกเพลงตามฉากเอง)
 @ending E_B_BEST                 จบเกม
 // คอมเมนต์
