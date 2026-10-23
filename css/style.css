@@ -102,10 +102,19 @@ button { font-family: inherit; cursor: pointer; }
 .choice:hover, .choice:focus-visible { transform: translateX(4px); background: #fff; outline: none; }
 
 /* แถบเมนูด่วน */
-#quick { position: absolute; z-index: 12; top: max(10px, env(safe-area-inset-top)); right: 10px; display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+#quick { position: absolute; z-index: 12; top: max(10px, env(safe-area-inset-top)); right: 10px; max-width: calc(100% - 64px); display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
 #quick button { border: 0; padding: 7px 11px; border-radius: 99px; background: rgba(20,26,43,.6); color: #e9e4d8;
   font: 400 13px var(--head); backdrop-filter: blur(4px); }
 #quick button.on { background: var(--lantern); color: var(--night); }
+
+/* ปุ่มเต็มจอ ลอยมุมซ้ายบนทุกหน้า */
+#fs-btn { position: absolute; z-index: 45; top: max(10px, env(safe-area-inset-top)); left: max(10px, env(safe-area-inset-left));
+  width: 36px; height: 36px; border: 0; border-radius: 50%; padding: 8px; background: rgba(20,26,43,.6); backdrop-filter: blur(4px);
+  cursor: pointer; opacity: .8; }
+#fs-btn:hover, #fs-btn:focus-visible { opacity: 1; outline: none; }
+#fs-btn svg { width: 100%; height: 100%; fill: none; stroke: #e9e4d8; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.rotate-hint { display: none; margin-top: 18px; font: 300 13px var(--head); opacity: .75; }
+@media (orientation: portrait) and (max-width: 640px) { .rotate-hint { display: block; } }
 
 /* หน้าจอเต็ม */
 .screen { position: absolute; inset: 0; z-index: 30; overflow-y: auto; }

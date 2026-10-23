@@ -24,9 +24,49 @@
   UI.init = function () {
     document.title = GAME_TITLE;
     bindInput();
+    initFullscreen();
     applySettings();
     UI.showTitle();
   };
+
+  // ---------- เต็มจอ + ล็อกแนวนอน ----------
+  // Android/Chrome: เต็มจอแล้วล็อกแนวนอนได้ · iPhone Safari ไม่รองรับทั้งสองอย่าง ปุ่มจะไม่โผล่ เหลือแค่คำแนะนำให้หมุนจอ
+  const docEl = document.documentElement;
+  const fsSupported = !!(docEl.requestFullscreen || docEl.webkitRequestFullscreen);
+  const isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+  UI.fsSupported = fsSupported;
+  UI.toggleFullscreen = async function () {
+    try {
+      if (isFs()) {
+        if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+        await (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      } else {
+        await (docEl.requestFullscreen || docEl.webkitRequestFullscreen).call(docEl, { navigationUI: 'hide' });
+        // ล็อกได้เฉพาะตอนเต็มจอบนมือถือ บนคอมจะ error เงียบๆ ไม่เป็นไร
+        if (screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape').catch(() => {});
+      }
+    } catch (e) { UI.toast('เบราว์เซอร์นี้ไม่ยอมเปิดเต็มจอ'); }
+  };
+  function syncFs() {
+    const b = $('#fs-btn');
+    if (!b) return;
+    const on = isFs();
+    b.classList.toggle('on', on);
+    b.title = b.ariaLabel = on ? 'ออกจากเต็มจอ' : 'เต็มจอ (แนวนอน)';
+    b.innerHTML = on
+      ? '<svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>'
+      : '<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  }
+  function initFullscreen() {
+    if (!fsSupported) return;
+    const b = el('button');
+    b.id = 'fs-btn';
+    b.onclick = e => { e.stopPropagation(); UI.toggleFullscreen(); };
+    $('#game').appendChild(b);
+    document.addEventListener('fullscreenchange', syncFs);
+    document.addEventListener('webkitfullscreenchange', syncFs);
+    syncFs();
+  }
 
   function applySettings() {
     document.documentElement.style.setProperty('--fs', (Engine.settings.size || 1));
@@ -61,6 +101,9 @@
       t.classList.add('gate');
       t.onclick = () => { UI._tapped = true; t.classList.remove('gate'); t.onclick = null; };
     } else { t.classList.remove('gate'); t.onclick = null; }
+    box.appendChild(el('div', 'rotate-hint', UI.fsSupported
+      ? 'เล่นแนวนอนจะเห็นภาพเต็มกว่า แตะปุ่มมุมซ้ายบนเพื่อเต็มจอ'
+      : 'เล่นแนวนอนจะเห็นภาพเต็มกว่า ลองหมุนโทรศัพท์ดูนะ'));
     t.appendChild(box);
     t.classList.remove('haunted', 'pic'); t.style.backgroundImage = '';
     // พื้นหลังหน้าแรก: ปกติใช้ภาพคืนโคมทะเล (CG05) ถ้าเคยเจอฉากจบห้องสมุด เปลี่ยนเป็น CG36
@@ -539,6 +582,7 @@
     add('โหลด', () => UI.openSaves('load'));
     add('ย้อนอ่าน', UI.openLog);
     add('ตั้งค่า', UI.openSettings);
+    if (UI.fsSupported) add('เต็มจอ / ออกจากเต็มจอ', () => { closeModal(); UI.toggleFullscreen(); });
     add('กลับหน้าแรก', () => { closeModal(); if (confirm('กลับหน้าแรก? ความคืบหน้าที่ยังไม่บันทึกจะหายไป')) UI.showTitle(); });
     m.body.appendChild(list);
   };
