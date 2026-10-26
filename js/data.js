@@ -19,7 +19,7 @@ for (const k in CHARS) SPEAKER_KEY[CHARS[k].name] = k;
 window.GIRLS = ['baibua', 'nina', 'prang', 'mintra', 'fasai'];
 
 // ฉากหลังที่มีภาพเวอร์ชันกลางคืน/เย็นจริง (ถ้าเจนภาพเพิ่ม ใส่ชื่อไฟล์ที่นี่ด้วย ไม่งั้นเกมจะย้อมสีภาพหลักแทน)
-window.BG_VARIANTS = ['BG01_sunset', 'BG03_night', 'BG04_night', 'BG06_night', 'BG07_night', 'BG09_night', 'BG11_night', 'BG13_night', 'BG14_night', 'BG16_night', 'BG18_night', 'BG19_night', 'BG20_night', 'BG21_night', 'BG22_night'];
+window.BG_VARIANTS = ['BG01_sunset', 'BG02_night', 'BG03_night', 'BG03_sunset', 'BG04_night', 'BG06_night', 'BG07_night', 'BG09_night', 'BG10_night', 'BG11_night', 'BG13_night', 'BG14_night', 'BG16_night', 'BG18_night', 'BG18_sunset', 'BG19_night', 'BG20_night', 'BG21_night', 'BG22_night'];
 
 window.BGS = {
   BG01: { name: 'ท่าเรือ', c: ['#f3c99e', '#6fa8bf'] },
