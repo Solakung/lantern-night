@@ -250,7 +250,12 @@
 
     const lines = ['@bg ' + a.bg, head];
     if (a.id === 'jedi') lines.push.apply(lines, jediLines());
-    else if (a.lines.length) lines.push(a.lines[Math.floor(Math.random() * a.lines.length)]);
+    else {
+      // ข้อความเปลี่ยนตามช่วงของเรื่อง ช่วงต้นสบายๆ กลางเรื่องเริ่มแปลก ใกล้งานเร่งรีบ
+      const ph = ACTIVITY_PHASES[a.id] || {};
+      const pool = (vv.WEEK >= 9 && ph.late) || (vv.WEEK >= 5 && ph.mid) || a.lines;
+      if (pool.length) lines.push(pool[Math.floor(Math.random() * pool.length)]);
+    }
     if (a.id === 'read' && Math.random() < 0.3) lines.push(
       '* ที่คั่นหนังสือรูปดาวอันหนึ่งวางลงข้างแขนผม', 'ฟ้าใส[happy]: ใช้อันนี้นะคะ อันเก่าของเธอขาดแล้ว',
       '* ผมไม่เคยบอกใครว่าที่คั่นหนังสือขาด');

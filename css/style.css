@@ -259,6 +259,7 @@ button { font-family: inherit; cursor: pointer; }
 .end-row em { grid-column: 2 / -1; font-style: normal; font-size: 12px; color: var(--muted); line-height: 1.5; }
 .end-hint { max-width: 520px; margin: 0 auto 16px; padding: 0 16px; font-size: 14px; line-height: 1.7; opacity: .85; }
 .end-hint b { display: block; font: 500 12px var(--head); letter-spacing: .08em; color: var(--lantern); margin-bottom: 2px; }
+.stat-hint { font: 12px var(--hand), var(--body); color: #8a7a4a; margin: -3px 0 5px; line-height: 1.3; }
 .rel-prog { font: 12px var(--hand), var(--body); color: #7a6d55; margin: -2px 0 6px 20px; }
 .rel-prog b { font-weight: 400; color: #b0573d; }
 .cg-view { position: absolute; inset: 0; z-index: 70; background: #000; }

@@ -385,7 +385,9 @@
     ['KNOW', 'BODY', 'ART', 'MIND', 'ENERGY'].forEach(k => {
       const row = el('div', 'stat' + (k === 'ENERGY' ? ' energy' : ''));
       row.innerHTML = '<span>' + STAT_NAMES[k] + '</span><div class="bar"><i style="width:' + (v[k] || 0) + '%"></i></div><b>' + (v[k] || 0) + '</b>';
+      row.title = STAT_HINTS[k] || '';
       n1.appendChild(row);
+      if (STAT_HINTS[k]) n1.appendChild(el('div', 'stat-hint', esc(STAT_HINTS[k])));
     });
     side.appendChild(n1);
     const n2 = el('div', 'note pink');
