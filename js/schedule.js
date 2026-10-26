@@ -271,7 +271,7 @@
     // ทริกเกอร์ตามค่าสถานะ
     const trig = [];
     const T = (cond, id) => { if (cond && !seen(id)) trig.push({ k: 'scene', id }); };
-    T(a.id === 'dock' && vv.BODY >= 30, 't1');
+    T(a.id === 'dock' && vv.BODY >= 30 && w >= 5, 't1');   // ลุงเสือเล่าเรื่องต้น ไม่ให้เกิดก่อนข่าวลือในหอ
     T(a.id === 'run' && vv.BODY >= 60, 't2');
     T((a.id === 'read' || a.id === 'study') && vv.KNOW >= 40, 't3');
     T(a.id === 'read' && vv.KNOW >= 70, 't4');
