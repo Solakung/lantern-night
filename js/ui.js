@@ -84,7 +84,7 @@
     const hasAuto = !!Engine.readSlot('auto');
     t.innerHTML = '';
     const box = el('div', 'title-inner');
-    box.appendChild(el('div', 'title-kicker', 'วิทยาลัยศิลปะวาริน · 12 สัปดาห์ก่อนคืนโคมทะเล'));
+    box.appendChild(el('div', 'title-kicker', 'มหาวิทยาลัยศิลปะชายทะเล · 12 สัปดาห์ก่อนคืนโคมทะเล'));
     box.appendChild(el('h1', 'title-main', esc(GAME_TITLE)));
     box.appendChild(el('div', 'title-sub', esc(GAME_SUBTITLE)));
     const menu = el('div', 'title-menu');
@@ -135,6 +135,13 @@
     const go = el('button', 'tbtn primary', 'เริ่มเรื่อง');
     go.onclick = () => { const n = input.value.trim() || 'ภูมิ'; closeModal(); UI.enterGame(); Engine.newGame(n); };
     m.body.appendChild(go);
+    // เคยจบเกมแล้ว ให้ข้ามสัปดาห์แรกได้
+    if ((Engine.global.clears || 0) > 0) {
+      const skip = el('button', 'tbtn', 'ข้ามสัปดาห์แรก');
+      skip.onclick = () => { const n = input.value.trim() || 'ภูมิ'; closeModal(); UI.enterGame(); Engine.newGame(n, true); };
+      m.body.appendChild(skip);
+      m.body.appendChild(el('p', 'hint', 'เคยเล่นจบแล้ว ข้ามไปเริ่มสัปดาห์ที่ 2 ได้เลย'));
+    }
     setTimeout(() => input.select(), 50);
   }
 

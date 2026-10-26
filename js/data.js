@@ -24,7 +24,7 @@ window.BG_VARIANTS = ['BG01_sunset', 'BG02_night', 'BG03_night', 'BG03_sunset', 
 
 window.BGS = {
   BG01: { name: 'ท่าเรือ', c: ['#f3c99e', '#6fa8bf'] },
-  BG02: { name: 'ทางเข้าวิทยาลัย', c: ['#cfe6c4', '#7fb38a'] },
+  BG02: { name: 'ทางเข้ามหาวิทยาลัย', c: ['#cfe6c4', '#7fb38a'] },
   BG03: { name: 'ห้องสโมสรนักศึกษา', c: ['#e8dcc2', '#9a8a6e'] },
   BG04: { name: 'ห้องสมุดกลาง', c: ['#e9d3a8', '#7a5b3a'] },
   BG05: { name: 'ห้องเก็บหนังสือใต้ห้องสมุด', c: ['#4a4036', '#1c1814'] },

@@ -89,7 +89,7 @@
   };
 
   // ---------- เริ่มเกม / ฉาก ----------
-  E.newGame = function (player) {
+  E.newGame = function (player, skipWeek1) {
     E.st = {
       v: newVars(), player: player || 'ภูมิ',
       scene: null, pc: 0, stack: [], queue: [], dyn: {},
@@ -98,6 +98,14 @@
     };
     E.log = [];
     Schedule.start();
+    if (skipWeek1) {
+      // คนที่เคยจบเกมแล้ว ข้ามสัปดาห์แรก: ได้ค่าความสนิทเฉลี่ยของสัปดาห์แรกไป แล้วเริ่มสัปดาห์ที่ 2 เลย
+      const v = E.st.v;
+      E.st.queue.forEach(id => { if (typeof id === 'string') v['SEEN_' + id] = 1; });
+      E.st.queue = [];
+      for (const g of GIRLS) v['AFF_' + g] = 8;
+      return E.playDynamic('_skip1', ['@bg BG13', '@title สัปดาห์ที่ 1', '> สัปดาห์แรกบนเกาะผ่านไปเร็วกว่าที่คิด ผมได้รู้จักทั้งห้าคน ได้รูมเมตชื่อเจได และได้บัตรห้องสมุดที่เขียนชื่อผมด้วยลายมือสวยๆ มาหนึ่งใบ']);
+    }
     E.next();
   };
 
