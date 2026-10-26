@@ -62,8 +62,9 @@
     }
     if (ln.startsWith('* ')) return { t: 'think', text: ln.slice(2) };
     if (ln.startsWith('> ')) return { t: 'narr', text: ln.slice(2) };
-    const m = ln.match(/^([^:\[\]{}<>*@\-]{1,24}?)(?:\[(\w+)\])?\s*:\s*(.+)$/);
-    if (m) return { t: 'say', who: m[1].trim(), e: m[2] || null, text: m[3] };
+    // ชื่อ[angry>happy]: แสดงสีหน้าแรกแว็บเดียว แล้วเปลี่ยนเป็นสีหน้าที่สองเอง
+    const m = ln.match(/^([^:\[\]{}<>*@\-]{1,24}?)(?:\[(\w+)(?:>(\w+))?\])?\s*:\s*(.+)$/);
+    if (m) return { t: 'say', who: m[1].trim(), e: m[2] || null, e2: m[3] || null, text: m[4] };
     return { t: 'narr', text: ln };
   }
 

@@ -223,6 +223,10 @@
     if (ins.t === 'say') {
       const k = SPEAKER_KEY[ins.who];
       if (k && (ins.e || !E.st.vis.spr[k]) && !E.st.vis.cg) showSprite(k, ins.e || (E.st.vis.spr[k] || 'normal'));
+      if (k && ins.e2 && !E.st.vis.cg) {
+        if (E.skipOn) showSprite(k, ins.e2);
+        else { const sc = E.st.scene, pc = E.st.pc; setTimeout(() => { if (E.st.scene === sc && E.st.pc === pc) { showSprite(k, ins.e2); UI.renderSprites(k); } }, 550); }
+      }
       // ตัวละครที่ไม่มีภาพ (เช่น ป้าแดง) พูด ให้ตัวละครบนจอหรี่ลง ส่วนตัวเอกพูดไม่ต้องหรี่
       UI.renderSprites(k || (ins.who === 'ภูมิ' ? null : '_offscreen'));
     } else UI.renderSprites(null);

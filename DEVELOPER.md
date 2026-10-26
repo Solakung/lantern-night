@@ -107,6 +107,8 @@
 @goto ป้าย   @jump ชื่อฉาก   @end
 @set MEMORY+1, HAS_LETTER=1
 @fx rain | norain | dark | light | black | shake | flash | night | day | lock
+
+สีหน้าแว็บ: `ฟ้าใส[angry>happy]: ...` ขึ้นสีหน้าแรกราวครึ่งวินาที แล้วเปลี่ยนเป็นสีหน้าที่สองเอง (ระหว่างข้ามข้อความจะใช้สีหน้าที่สองเลย)
 @bgm horror | off | auto        บังคับเพลง (ปกติเกมเลือกเพลงตามฉากเอง)
 @ending E_B_BEST                 จบเกม
 // คอมเมนต์
