@@ -282,7 +282,7 @@
     T(a.id === 'read' && vv.KNOW >= 70, 't4');
     T((a.id === 'music' || a.id === 'amp') && vv.ART >= 40, 't5');
     T(a.id === 'bake' && vv.ART >= 30 && vv.BAKED >= 3, 't6');
-    T(a.id === 'art' && vv.ART >= 60, 't7');
+    T(a.id === 'art' && vv.ART >= 45, 't7');
     T(w >= 9 && i === 3 && ['KNOW', 'BODY', 'ART', 'MIND'].every(k => vv[k] >= 40), 't10');
     if (trig.length) st.queue = trig.concat(st.queue);
     Engine.playDynamic('_slot', lines);
