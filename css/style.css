@@ -276,6 +276,7 @@ button { font-family: inherit; cursor: pointer; }
 .end-type { font: 500 13px var(--head); letter-spacing: .3em; text-transform: uppercase; color: var(--lantern); }
 .end-bad .end-type { color: #b9c9d6; }
 .end-name { font: 400 clamp(28px, 6vw, 44px) var(--head); margin: 0; }
+.end-quip { font: 300 16px var(--head); opacity: .85; margin: -4px 0 14px; }
 .end-count { opacity: .6; margin: 0 0 12px; }
 
 #toast { position: absolute; z-index: 80; left: 50%; top: 58px; transform: translate(-50%, -12px); opacity: 0; pointer-events: none;

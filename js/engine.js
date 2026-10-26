@@ -167,6 +167,7 @@
       if (!ins) return E.endScene();
       switch (ins.t) {
         case 'bg': setBg(ins.id, ins.v); E.st.pc++; break;
+        case 'checkpoint': E.st.pc++; E.save('cp_' + ins.id); break;   // จุดย้อนกลับของฉากจบพิเศษ
         case 'cg': setCg(ins.id); E.st.pc++; break;
         case 'show': showSprite(ins.k, ins.e); E.st.pc++; break;
         case 'hide': delete E.st.vis.spr[ins.k]; UI.renderSprites(); E.st.pc++; break;

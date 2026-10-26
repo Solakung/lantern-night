@@ -56,6 +56,7 @@
         case 'note': return { t: 'note', text: arg };
         case 'fx': return { t: 'fx', name: a[0] };
         case 'bgm': return { t: 'bgm', id: a[0] || 'auto' };
+        case 'checkpoint': return { t: 'checkpoint', id: a[0] || 'cp' };
         default: throw new Error(where + ' ไม่รู้จักคำสั่ง @' + cmd);
       }
     }

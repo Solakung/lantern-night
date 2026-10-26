@@ -92,6 +92,7 @@ window.ENDINGS = [
   { id: 'E_F_BAD', name: 'ห้องสมุดที่ไม่มีวันปิด', route: 'fasai', type: 'Bad', hint: 'การยอมให้เธอทุกอย่าง ไม่ใช่การช่วยเธอ' },
   { id: 'E_LANTERN', name: 'โคมดวงคู่', route: 'main', type: 'Good', hint: 'หลักฐานที่เก็บไว้ อาจพาไปสู่การคุยกับใครบางคนตรงๆ' },
   { id: 'E_RELEASE', name: 'ปล่อยมือ', route: 'main', type: 'True' },
+  { id: 'E_EH', name: 'หนีได้ก็ต้องหนีสิ', route: 'main', type: 'EH?', extra: true, quip: '...แต่ใครจะดูแลพวกเธอล่ะ', retry: 'eh', retryLabel: 'ย้อนกลับไปที่ท่าเรือ' },
   { id: 'E_LIBRARY', name: 'ห้องสมุดที่ไม่มีวันปิด (บทหลัก)', route: 'main', type: 'Bad', hint: 'ทุกครั้งที่ทำให้เธอหึง เธอจดไว้หมด' }
 ];
 

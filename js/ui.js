@@ -448,13 +448,20 @@
     e.className = 'screen end-' + (info.type || '').toLowerCase();
     e.innerHTML = '';
     const box = el('div', 'end-inner');
-    box.appendChild(el('div', 'end-type', esc((info.type ? info.type + ' End' : 'End'))));
+    box.appendChild(el('div', 'end-type', esc(info.extra ? info.type + ' Ending' : (info.type ? info.type + ' End' : 'End'))));
     box.appendChild(el('h2', 'end-name', esc(info.name)));
-    const got = ENDINGS.filter(x => Engine.global.end[x.id]).length;
-    box.appendChild(el('p', 'end-count', 'เก็บฉากจบแล้ว ' + got + ' / ' + ENDINGS.length));
+    const main = ENDINGS.filter(x => !x.extra);
+    const got = main.filter(x => Engine.global.end[x.id]).length;
+    if (info.quip) box.appendChild(el('p', 'end-quip', esc(info.quip)));
+    box.appendChild(el('p', 'end-count', 'เก็บฉากจบแล้ว ' + got + ' / ' + main.length));
     const meta = ENDINGS.find(x => x.id === info.id);
     if (meta && meta.hint) box.appendChild(el('p', 'end-hint', '<b>ยังมีทางอื่นอีก</b> ' + esc(meta.hint)));
-    const b = el('button', 'tbtn primary', 'กลับหน้าแรก');
+    if (info.retry && Engine.readSlot('cp_' + info.retry)) {
+      const r = el('button', 'tbtn primary', esc(info.retryLabel || 'ย้อนกลับ'));
+      r.onclick = () => Engine.load('cp_' + info.retry);
+      box.appendChild(r);
+    }
+    const b = el('button', 'tbtn' + (info.retry ? '' : ' primary'), 'กลับหน้าแรก');
     b.onclick = UI.showTitle;
     box.appendChild(b);
     e.appendChild(box);
@@ -539,8 +546,8 @@
       grid.appendChild(c);
     });
     m.body.appendChild(grid);
-    const eg = ENDINGS.filter(x => Engine.global.end[x.id]).length;
-    m.body.appendChild(el('h3', 'gal-h', 'ฉากจบ · ' + eg + ' / ' + ENDINGS.length));
+    const eg = ENDINGS.filter(x => !x.extra && Engine.global.end[x.id]).length;
+    m.body.appendChild(el('h3', 'gal-h', 'ฉากจบ · ' + eg + ' / ' + ENDINGS.filter(x => !x.extra).length));
     const list = el('div', 'end-list');
     ENDINGS.forEach(x => {
       const ok = Engine.global.end[x.id];
