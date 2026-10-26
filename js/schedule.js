@@ -130,7 +130,7 @@
         .sort((a, b) => (vv['AFF_' + b] || 0) - (vv['AFF_' + a] || 0));
       for (const g of order) {
         const id = CRISIS[g];
-        if (!seen(id) && (vv['AFF_' + g] || 0) >= 30 && vv.OBS >= 25) { q.push({ k: 'scene', id }); break; }
+        if (!seen(id) && (vv['AFF_' + g] || 0) >= 30 && (vv.OBS >= 25 || w >= 7))   // สัปดาห์ 7 ขึ้นไปเกิดแน่ คนที่ไม่ค่อยทำให้ฟ้าใสหึงก็ยังได้เห็นปมหลัก { q.push({ k: 'scene', id }); break; }
       }
       if (!seen('s15') && vv.EVIDENCE >= 2) q.push({ k: 'scene', id: 's15' });
       else if (seen('s15') && !seen('s17') && w >= 6) q.push({ k: 'scene', id: 's17' });
