@@ -10,7 +10,8 @@ window.CHARS = {
   mintra: { name: 'มินตรา', color: '#5b7fbf' },
   fasai:  { name: 'ฟ้าใส', color: '#9fc6d9' },
   jedi:   { name: 'เจได', color: '#e06a8a' },
-  suea:   { name: 'ลุงเสือ', color: '#a07a52' }
+  suea:   { name: 'ลุงเสือ', color: '#a07a52' },
+  fai:    { name: 'ฝ้าย', color: '#4f7a5a' }
 };
 // ชื่อในบท -> คีย์สไปรต์
 window.SPEAKER_KEY = {};
