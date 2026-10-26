@@ -302,3 +302,7 @@ button { font-family: inherit; cursor: pointer; }
   #text { font-size: calc(15px * var(--fs)); line-height: 1.5; min-height: 1.5em; }
   #quick button { padding: 5px 9px; font-size: 11.5px; }
 }
+@media (max-height: 500px) {
+  /* ตัวละครใหญ่ขึ้นและยกขึ้น ขาที่ถูกกล่องข้อความบังอยู่แล้วเลื่อนลงพ้นจอแทน */
+  .sprite { height: 104%; bottom: -14%; width: min(52vh, 40vw); }
+}
