@@ -71,10 +71,12 @@
   function applySettings() {
     document.documentElement.style.setProperty('--fs', (Engine.settings.size || 1));
     if (window.Music) Music.setVolume();
+    if (window.Sfx) Sfx.setVolume();
   }
 
   // ---------- หน้าแรก ----------
   UI.showTitle = function () {
+    if (window.Sfx) Sfx.rain(false);
     stopTimers();
     $('#game').classList.remove('ingame');
     hideAll();
@@ -239,6 +241,7 @@
 
   UI.renderFx = function () {
     const fx = Engine.st.vis.fx || {};
+    if (window.Sfx) Sfx.rain(!!fx.rain && Engine.st.mode === 'scene');
     $('#fx').className = 'layer' + (fx.rain ? ' rain' : '') + (fx.dark ? ' dark' : '') + (fx.black ? ' black' : '') + (fx.night ? ' night' : '');
   };
   UI.oneShot = function (name) {
@@ -262,6 +265,7 @@
     const label = type === 'msg' ? '📱 ข้อความ' : type === 'note' ? 'โน้ต' : '';
     if (label) { nb.textContent = label; nb.classList.remove('hidden'); }
     fullText = text;
+    if (type === 'msg' && !Engine.skipOn && window.Sfx) Sfx.buzz();
     const t = $('#text');
     stopTimers();
     if (Engine.skipOn && (read || Engine.settings.skipUnread)) {
@@ -334,6 +338,7 @@
   const mood = o => o < 25 ? '' : o < 40 ? 'บางครั้งรู้สึกเหมือนมีคนมองอยู่' : o < 60 ? 'ข้อความจากเบอร์ไม่รู้จักมาบ่อยขึ้น' : o < 75 ? 'ร่มสีขาวโผล่ในสายตาบ่อยเกินไปแล้ว ...อย่าทำให้เธอหึงไปมากกว่านี้เลย' : 'ไม่ว่าจะไปที่ไหน เหมือนเธอรู้ก่อนเสมอ ...ตอนนี้เธอไม่ยอมปล่อยแล้ว';
 
   UI.showPlanner = function () {
+    if (window.Sfx) Sfx.rain(false);
     Music.refresh();
     stopTimers();
     const st = Engine.st, v = st.v;
@@ -440,6 +445,7 @@
 
   // ---------- ฉากจบ ----------
   UI.showEnding = function (info) {
+    if (window.Sfx) Sfx.rain(false);
     stopTimers();
     $('#textbox').classList.add('hidden');
     $('#quick').classList.add('hidden');
@@ -590,6 +596,7 @@
     row('หน่วงโหมดอัตโนมัติ', [['สั้น', 800], ['ปกติ', 1500], ['ยาว', 2500]], 'auto');
     row('ขนาดตัวอักษร', [['เล็ก', 0.9], ['ปกติ', 1], ['ใหญ่', 1.15]], 'size');
     row('เสียงเพลง', [['ปิด', 0], ['เบา', 0.3], ['ปกติ', 0.6], ['ดัง', 1]], 'music');
+    row('เสียงเอฟเฟกต์', [['ปิด', 0], ['เบา', 0.35], ['ปกติ', 0.7], ['ดัง', 1]], 'sfx');
     row('ข้ามข้อความที่ยังไม่อ่าน', [['ไม่', false], ['ข้าม', true]], 'skipUnread');
   };
 

@@ -25,7 +25,7 @@
 
   const E = window.Engine = {
     st: null,
-    settings: { speed: 30, auto: 1500, size: 1, skipUnread: false, music: 0.6 },
+    settings: { speed: 30, auto: 1500, size: 1, skipUnread: false, music: 0.6, sfx: 0.7 },
     global: { cg: {}, end: {}, read: {}, clears: 0, umbrella: false },
     autoOn: false, skipOn: false, typing: false, waiting: null, log: []
   };
@@ -260,7 +260,8 @@
     else if (name === 'night') fx.night = 1;
     else if (name === 'day') delete fx.night;
     else if (name === 'black') fx.black = 1;
-    else UI.oneShot(name);
+    else if (name === 'lock') { if (!E.skipOn) Sfx.lock(); }
+    else { UI.oneShot(name); if (name === 'flash' && !E.skipOn) Sfx.thunder(); }
     UI.renderFx();
     Music.refresh();
   }
