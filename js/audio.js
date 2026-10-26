@@ -15,7 +15,7 @@
     if (/^(s21|b10|n10|p10|m10|f10)$/.test(id)) return 'festival';
     if (/^(b11|n11|p11|m11|f11|s26|s27)$/.test(id)) return 'horror';
     if (/^end_.*bad$|^end_lib$/.test(id)) return 'horror';
-    if (/^(end_release|end_f_good)$/.test(id)) return 'sad';
+    if (/^(end_release|end_f_good|end_eh)$/.test(id)) return 'sad';
     if (/^end_/.test(id)) return 'sweet';
     if (/^(f\d+|rf\d+|gen_fasai|s17|s18)$/.test(id)) return 'library';
     if (/^(s00|s10|s14a|s20)$/.test(id)) return 'tension';
