@@ -448,7 +448,10 @@
     e.className = 'screen end-' + (info.type || '').toLowerCase();
     e.innerHTML = '';
     const box = el('div', 'end-inner');
-    box.appendChild(el('div', 'end-type', esc(info.extra ? info.type + ' Ending' : (info.type ? info.type + ' End' : 'End'))));
+    if (info.extra) {
+      box.appendChild(el('div', 'end-big', esc(info.type)));
+      box.appendChild(el('div', 'end-type', 'Ending'));
+    } else box.appendChild(el('div', 'end-type', esc(info.type ? info.type + ' End' : 'End')));
     box.appendChild(el('h2', 'end-name', esc(info.name)));
     const main = ENDINGS.filter(x => !x.extra);
     const got = main.filter(x => Engine.global.end[x.id]).length;
