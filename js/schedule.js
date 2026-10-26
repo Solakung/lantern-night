@@ -126,11 +126,12 @@
     if (w === 5) q.push({ k: 'scene', id: 's10' });
     if (w === 10) q.push({ k: 'scene', id: 's19' });
     if (w >= 5 && w <= 10) {
+      const anyCrisis = Object.values(CRISIS).some(seen);
       const order = ['baibua', 'nina', 'prang', 'mintra']
         .sort((a, b) => (vv['AFF_' + b] || 0) - (vv['AFF_' + a] || 0));
       for (const g of order) {
         const id = CRISIS[g];
-        if (!seen(id) && (vv['AFF_' + g] || 0) >= 30 && (vv.OBS >= 25 || w >= 7)) { q.push({ k: 'scene', id }); break; }   // สัปดาห์ 7 ขึ้นไปเกิดแน่ คนที่ไม่ค่อยทำให้ฟ้าใสหึงก็ยังได้เห็นปมหลัก
+        if (!seen(id) && (vv['AFF_' + g] || 0) >= 30 && (vv.OBS >= 25 || (w >= 7 && !anyCrisis))) { q.push({ k: 'scene', id }); break; }   // ถ้ายังไม่เคยเจอเลย สัปดาห์ 7 จะเกิดหนึ่งครั้งแน่นอน
       }
       if (!seen('s15') && vv.EVIDENCE >= 2) q.push({ k: 'scene', id: 's15' });
       else if (seen('s15') && !seen('s17') && w >= 6) q.push({ k: 'scene', id: 's17' });
