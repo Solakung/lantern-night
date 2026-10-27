@@ -17,7 +17,7 @@
     if (/^end_.*bad$|^end_lib$/.test(id)) return 'horror';
     if (/^(end_release|end_f_good|end_eh)$/.test(id)) return 'sad';
     if (/^end_/.test(id)) return 'sweet';
-    if (/^(f\d+|rf\d+|gen_fasai|s17|s18)$/.test(id)) return 'library';
+    if (/^(f\d+|rf\d+|gen_fasai_\d+|s17|s18)$/.test(id)) return 'library';
     if (/^(s00|s10|s14a|s20)$/.test(id)) return 'tension';
     return 'island';
   }

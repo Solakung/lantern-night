@@ -77,6 +77,7 @@
     mintra: [{ id: 'rm1' }, { id: 'rm2' }, { id: 'rm3' }, { id: 'rm4' }, { id: 'rm5' }, { id: 'rm6', w: 7 }],
     fasai: [{ id: 'rf1' }, { id: 'rf2' }, { id: 'rf3' }, { id: 'rf4' }, { id: 'rf5' }, { id: 'rf6' }]
   };
+  const GEN_COUNT = 8;
   const CRISIS = { baibua: 's11a', nina: 's12a', prang: 's13a', mintra: 's14a' };
 
   const S = window.Schedule = { ROUTES, RANDOM };
@@ -200,6 +201,7 @@
     Engine.next();
   };
 
+  S.pickVisit = pickVisit;
   function pickVisit(g) {
     const vv = v(), w = vv.WEEK;
     if (g !== 'fasai' && w >= 8 && vv['LASTV_' + g] === w - 1 && !seen('s16')) return 's16';
@@ -209,7 +211,15 @@
     }
     const pool = RANDOM[g].filter(r => !seen(r.id) && w >= (r.w || 0));
     if (pool.length) return pool[Math.floor(Math.random() * pool.length)].id;
-    return 'gen_' + g;
+    // ฉากไปหาทั่วไป: วนครบทุกแบบก่อนค่อยซ้ำ และไม่ออกแบบเดิมติดกัน
+    const all = []; for (let i = 1; i <= GEN_COUNT; i++) all.push('gen_' + g + '_' + i);
+    let used = (vv['GENC_' + g] || '').split(',').filter(Boolean);
+    let left = all.filter(id => !used.includes(id));
+    if (!left.length) { used = []; left = all.filter(id => id !== vv['GENL_' + g]); }
+    const id = left[Math.floor(Math.random() * left.length)];
+    vv['GENC_' + g] = used.concat(id).join(',');
+    vv['GENL_' + g] = id;
+    return id;
   }
 
   function doSlot(i, act) {
